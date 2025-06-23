@@ -10,7 +10,7 @@ const highElement = scoreUi.querySelector(".high > span");
 const buttonPlay = document.querySelector(".button-play");
 const buttonRestart = document.querySelector(".button-restart");
 
-gameOverScreen.remove();
+gameOverScreen.classList.remove("show");
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -21,6 +21,7 @@ canvas.height = innerHeight;
 const gameAreaMargin = 360; 
 const gameAreaX = gameAreaMargin; 
 const gameAreaWidth = canvas.width - (gameAreaMargin * 2); 
+
 
 function drawGameAreaBorders(ctx, canvasHeight, gameAreaX, gameAreaWidth) {
     ctx.save(); 
@@ -44,6 +45,7 @@ let startTime = null;
 const gameData = {
     score: 0,
     high: 0,
+    lives: 3,
 };
 
 const keys = {
@@ -80,7 +82,19 @@ const incrementScore = (value) => {
 const showGameData = () => {
     scoreElement.textContent = gameData.score;
     highElement.textContent = gameData.high;
+    if (!document.querySelector(".lives-ui")) {
+        const livesUi = document.createElement("div");
+        livesUi.classList.add("lives-ui");
+        livesUi.style.marginTop = "10px";
+        livesUi.style.textTransform = "uppercase";
+        livesUi.style.fontSize = "1rem";
+        livesUi.innerHTML = `Lives: <span>${gameData.lives}</span>`;
+        scoreUi.appendChild(livesUi);
+    } else {
+        document.querySelector(".lives-ui span").textContent = gameData.lives;
+    }
 };
+
 
 const gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -102,10 +116,18 @@ const gameLoop = () => {
             tronco.draw(ctx);
 
             if (isColliding(penguim, tronco)) {
-                currentState = GameState.GAME_OVER;
-                console.log("Game Over");
-                document.body.append(gameOverScreen);
+                gameData.lives--;
+
+                if (gameData.lives <= 0) {
+                    currentState = GameState.GAME_OVER;
+                    gameOverScreen.classList.add("show");
+                } else {
+                    // Reposiciona tronco que bateu
+                    tronco.position.y = -tronco.height;
+                    tronco.position.x = gameAreaX + Math.random() * (gameAreaWidth - tronco.width);
+                }
             }
+
         }
 
         ctx.save();
@@ -161,13 +183,15 @@ buttonPlay.addEventListener("click", () => {
     scoreUi.style.display = "block";
     currentState = GameState.PLAYING;
     gameData.score = 0;
+    gameData.lives = 3;
     startTime = performance.now();
 });
 
 buttonRestart.addEventListener("click", () => {
     currentState = GameState.PLAYING;
     gameData.score = 0;
-    gameOverScreen.remove();
+    gameData.lives = 3;
+    gameOverScreen.classList.remove("show");
     startTime = performance.now();
 
     for (const tronco of troncos) {

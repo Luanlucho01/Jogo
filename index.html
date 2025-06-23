@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
-
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/style.css" />
-  
-  <title>Boia - Jogo do Pinguim</title>
+  <title>Penguin Rush</title>
 </head>
 <body>
 
@@ -20,19 +18,22 @@
 
   <section class="start-screen screen">
     <div>
-      <h1>Pinguim</h1>
+      <h1 class="title-name">Penguin Rush</h1>
       <button class="button-play">Jogar</button>
     </div>
 
-
-    <span>ola</span>
+    <img src="src/assets/images/Penguim start.png" alt="Start Penguin" class="start-img" />
   </section>
 
   <section class="game-over screen">
-    <div>
+    <div class="screen-bg"></div>
+
+    <div class="screen-content">
       <h1>Game Over</h1>
       <button class="button-restart">Restart</button>
     </div>
+
+    <img src="src/assets/images/Penguim restart.png" alt="Game Over Penguin" class="gameover-img" />
   </section>
 
   <canvas></canvas>
