@@ -10,6 +10,15 @@ class Penguim {
             y: canvasHeight - this.height,
         };
 
+
+        // hitbox do pinguim
+        this.hitbox = {
+            offsetX: 50,
+            offsetY: 20,
+            width: 30,
+            height: 80,
+        };
+
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.gameAreaX = gameAreaX;        
@@ -38,8 +47,24 @@ class Penguim {
         }
     }
 
+    getHitbox() {
+        return {
+            position: {
+                x: this.position.x + this.hitbox.offsetX,
+                y: this.position.y + this.hitbox.offsetY,
+            },
+            width: this.hitbox.width,
+            height: this.hitbox.height
+        };
+    }
+
     draw(ctx) {
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+
+        // comando abaixo desenha a hitbox do pinguim, descomentar para ver
+        // const hb = this.getHitbox();
+        // ctx.strokeStyle = "red";
+        // ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
     }
 }
  

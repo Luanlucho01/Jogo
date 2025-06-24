@@ -1,11 +1,36 @@
 import { PATH_TRONCO_IMAGE } from "../utils/constants.js";
 
 class Tronco {
-    constructor(position, velocity) {
-        this.position = position;
-        this.width = 113;
-        this.height = 80;
+    constructor(canvasWidth, canvasHeight, velocity) {
+        // ponto de origem do tronco
+        this.origin = {
+            x: canvasWidth / 2,         // spawn horizontal do tronco (ja ta no meio da tela)
+            y: canvasHeight * 0.5       // spawn vertical do tronco
+        };
+
+        const offsetX = (Math.random() - 0.5) * canvasWidth * 0.6;
+
+        this.position = {
+            x: this.origin.x,
+            y: this.origin.y
+        };
+
+        this.targetX = this.origin.x + offsetX;
+        this.distanceY = canvasHeight;
         this.velocity = velocity;
+        this.travelProgress = 0;
+
+        // tamanho do spawn do tronco
+        this.baseWidth = 30;
+        this.baseHeight = 20;
+
+        this.maxWidth = 200;
+        this.maxHeight = 160;
+
+        // tamanho final do spawn
+        this.width = this.baseWidth;
+        this.height = this.baseHeight;
+
         this.image = this.getImage(PATH_TRONCO_IMAGE);
     }
 
@@ -15,38 +40,39 @@ class Tronco {
         return image;
     }
 
-    moveLeft() {
-        this.position.x -= this.velocity;
-    }
 
-    moveRight() {
-        this.position.x += this.velocity;
-    }
-
-    draw(ctx) { 
+    draw(ctx) {
         ctx.drawImage(
             this.image,
-            this.position.x,
-            this.position.y,
+            this.position.x - this.width / 2,  
+            this.position.y - this.height / 2, 
             this.width,
             this.height
         );
     }
 
     fall(canvasHeight, canvasWidth, gameAreaX, gameAreaWidth) {
-        this.position.y += this.velocity;
+        this.travelProgress += this.velocity / canvasHeight;
 
-        if (this.position.y > canvasHeight) {
-            const minResetY = -this.height * 3; 
-            const maxResetY = -this.height;     
-            
-            this.position.y = minResetY + Math.random() * (maxResetY - minResetY);
+        if (this.travelProgress >= 1) {
+            this.travelProgress = 0;
+            this.position = { ...this.origin };
 
-            const minX = gameAreaX;
-            const maxX = gameAreaX + gameAreaWidth - this.width;
-            this.position.x = minX + Math.random() * (maxX - minX);
+            // desvio aleatório do tronco
+            const offsetX = (Math.random() - 0.5) * canvasWidth * 0.6;
+            this.targetX = this.origin.x + offsetX;
         }
+
+        this.position.x = this.origin.x + (this.targetX - this.origin.x) * this.travelProgress;
+
+        this.position.y = this.origin.y + this.distanceY * this.travelProgress;
+
+        this.width = this.baseWidth + (this.maxWidth - this.baseWidth) * this.travelProgress;
+        this.height = this.baseHeight + (this.maxHeight - this.baseHeight) * this.travelProgress;
     }
 }
+
+
+
 
 export default Tronco;
