@@ -1,4 +1,4 @@
-import { PATH_PENGUIM_IMAGE, PATH_PENGUIM_JUMP_IMAGE } from "../utils/constants.js";
+import { HIT_SOUND_PATH, PATH_PENGUIM_IMAGE, PATH_PENGUIM_JUMP_IMAGE } from "../utils/constants.js";
 
 class Penguim {
     constructor(canvasWidth, canvasHeight, gameAreaX, gameAreaWidth) {
@@ -35,6 +35,15 @@ class Penguim {
         this.initialJumpForce = -15; 
         this.groundY = canvasHeight - this.originalHeight;
         this.jumpScaleFactor = 1.2; 
+
+        this.isInvincible = false;
+        this.invincibilityDuration = 1500; 
+        this.blinkInterval = 100; 
+        this.lastBlinkTime = 0;
+        this.invincibilityStartTime = 0;
+        this.isVisible = true; 
+
+        this.hitSound = new Audio(HIT_SOUND_PATH);
     }
 
     getImage(path) {
@@ -66,8 +75,8 @@ class Penguim {
 
     update() {
         if (this.isJumping) {
-            this.jumpVelocityY += this.gravity; 
-            this.position.y += this.jumpVelocityY; 
+            this.jumpVelocityY += this.gravity;
+            this.position.y += this.jumpVelocityY;
 
             const normalizedJumpVelocity = Math.abs(this.jumpVelocityY / this.initialJumpForce);
             const scale = 1 + (this.jumpScaleFactor - 1) * (1 - normalizedJumpVelocity);
@@ -76,14 +85,26 @@ class Penguim {
             this.currentHeight = this.originalHeight * scale;
 
             if (this.position.y >= this.groundY) {
-                this.position.y = this.groundY; 
-                this.isJumping = false; 
-                this.jumpVelocityY = 0; 
-                this.currentWidth = this.originalWidth; 
-                this.currentHeight = this.originalHeight; 
+                this.position.y = this.groundY;
+                this.isJumping = false;
+                this.jumpVelocityY = 0;
+                this.currentWidth = this.originalWidth;
+                this.currentHeight = this.originalHeight;
+            }
+        }
+
+        if (this.isInvincible) {
+            const now = performance.now();
+            if (now - this.invincibilityStartTime > this.invincibilityDuration) {
+                this.isInvincible = false;
+                this.isVisible = true;
+            } else if (now - this.lastBlinkTime > this.blinkInterval) {
+                this.isVisible = !this.isVisible;
+                this.lastBlinkTime = now;
             }
         }
     }
+
 
     getHitbox() {
         const hitboxX = this.position.x + (this.currentWidth - this.hitbox.width) / 2;
@@ -99,19 +120,48 @@ class Penguim {
         };
     }
 
-    draw(ctx) {
-        
-        const imageToDraw = this.isJumping ? this.jumpImage : this.image;
+    hit() {
+        if (!this.isInvincible) {
+            this.isInvincible = true;
+            this.invincibilityStartTime = performance.now();
+            this.lastBlinkTime = performance.now();
+            this.isVisible = false;
 
-        const drawX = this.position.x - (this.currentWidth - this.originalWidth) / 2;
-        const drawY = this.position.y - (this.currentHeight - this.originalHeight);
+            if (this.hitSound) {
+                this.hitSound.currentTime = 0;
+                this.hitSound.play();
+            }
+        }
+    }
+
+
+
+    draw(ctx) {
+    const imageToDraw = this.isJumping ? this.jumpImage : this.image;
+    const drawX = this.position.x - (this.currentWidth - this.originalWidth) / 2;
+    const drawY = this.position.y - (this.currentHeight - this.originalHeight);
+
+    if (this.isInvincible) {
+        ctx.save();
+        ctx.globalAlpha = this.isVisible ? 1 : 0; 
         ctx.drawImage(imageToDraw, drawX, drawY, this.currentWidth, this.currentHeight);
 
-        // Comando abaixo desenha a hitbox do pinguim (descomentar para ver)
-        const hb = this.getHitbox();
-        ctx.strokeStyle = "red";
-        ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+        if (this.isVisible) {
+            ctx.globalCompositeOperation = "source-atop";
+            ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+            ctx.fillRect(drawX, drawY, this.currentWidth, this.currentHeight);
+        }
+
+        ctx.restore();
+    } else {
+        ctx.drawImage(imageToDraw, drawX, drawY, this.currentWidth, this.currentHeight);
     }
+
+    const hb = this.getHitbox();
+    ctx.strokeStyle = "red";
+    ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+}
+
 }
 
 export default Penguim;

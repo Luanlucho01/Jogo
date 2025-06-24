@@ -25,8 +25,8 @@ class Tronco {
         this.travelProgress = 0;
 
         // tamanho do spawn do tronco (base e máximo)
-        this.baseWidth = 30;
-        this.baseHeight = 20;
+        this.baseWidth = 45;
+        this.baseHeight = 30;
 
         this.maxWidth = 200;
         this.maxHeight = 160;

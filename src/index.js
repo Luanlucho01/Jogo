@@ -4,13 +4,25 @@ import { GameState } from "./utils/constants.js";
 
 const startScreen = document.querySelector(".start-screen");
 const gameOverScreen = document.querySelector(".game-over");
+const aboutScreen = document.querySelector(".about-screen");                         
 const scoreUi = document.querySelector(".score-ui");
 const scoreElement = scoreUi.querySelector(".score > span");
 const highElement = scoreUi.querySelector(".high > span");
 const buttonPlay = document.querySelector(".button-play");
 const buttonRestart = document.querySelector(".button-restart");
+const buttonAbout = document.querySelector(".button-about"); 
+const buttonBack = document.querySelector(".button-back");
+
+
+const pauseScreen = document.querySelector(".pause-screen");
+const buttonResume = document.querySelector(".button-resume");
+const buttonExit = document.querySelector(".button-exit");
+
+let isPaused = false;
+
 
 gameOverScreen.classList.remove("show");
+aboutScreen.classList.add("hidden"); 
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -101,6 +113,12 @@ const showGameData = () => {
 
 
 const gameLoop = () => {
+    if (isPaused) {
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+
+
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
     drawGameAreaBorders(ctx, canvas.height, gameAreaX, gameAreaWidth); 
@@ -123,16 +141,19 @@ const gameLoop = () => {
             tronco.draw(ctx); 
 
             if (isColliding(penguim.getHitbox(), tronco.getHitbox())) {
-                gameData.lives--; 
+                if (!penguim.isInvincible) { 
+                    penguim.hit(); 
+                    gameData.lives--;
 
-                if (gameData.lives <= 0) {
-                    currentState = GameState.GAME_OVER; 
-                    gameOverScreen.classList.add("show"); 
-                    clearInterval(troncoSpawnInterval); 
-                } else {
-                    tronco.travelProgress = 1;
+                    if (gameData.lives <= 0) {
+                        currentState = GameState.GAME_OVER;
+                        gameOverScreen.classList.add("show");
+                        clearInterval(troncoSpawnInterval);
+                    } else {
+                        tronco.travelProgress = 1;
+                    }
                 }
-            }
+}
         }
 
         ctx.save();
@@ -170,8 +191,15 @@ addEventListener("keyup", (event) => {
     if (key === "d") keys.right = false;
 });
 
+addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && currentState === GameState.PLAYING) {
+        togglePause();
+    }
+});
+
 buttonPlay.addEventListener("click", () => {
-    startScreen.remove(); 
+    startScreen.classList.add("hidden");
+
     scoreUi.style.display = "block"; 
     currentState = GameState.PLAYING; 
     gameData.score = 0; 
@@ -199,4 +227,40 @@ buttonRestart.addEventListener("click", () => {
     troncoSpawnInterval = setInterval(spawnTronco, 2000); 
 });
 
-gameLoop(); 
+
+buttonAbout.addEventListener("click", () => {
+    startScreen.classList.add("hidden"); 
+    aboutScreen.classList.remove("hidden"); 
+});
+
+buttonBack.addEventListener("click", () => {
+    aboutScreen.classList.add("hidden"); 
+    startScreen.classList.remove("hidden"); 
+});
+
+function togglePause() {
+    isPaused = !isPaused;
+    pauseScreen.classList.toggle("hidden", !isPaused);
+}
+
+buttonResume.addEventListener("click", () => {
+    togglePause();
+});
+
+buttonExit.addEventListener("click", () => {
+    pauseScreen.classList.add("hidden");
+    isPaused = false;
+
+    currentState = GameState.START;
+    scoreUi.style.display = "none";
+    gameOverScreen.classList.remove("show");
+    startScreen.classList.remove("hidden");
+    aboutScreen.classList.add("hidden");
+
+    clearInterval(troncoSpawnInterval);
+    troncos.length = 0;
+    gameData.score = 0;
+    gameData.lives = 3;
+});
+
+gameLoop();

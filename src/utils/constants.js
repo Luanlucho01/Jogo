@@ -1,6 +1,8 @@
 export const PATH_PENGUIM_IMAGE = "src/assets/images/penguim.PNG";
 export const PATH_TRONCO_IMAGE = ["src/assets/images/tronco.PNG", "src/assets/images/obstaculo2sembg.PNG", "src/assets/images/obstaculo3sembg.PNG"]
 export const PATH_PENGUIM_JUMP_IMAGE = "src/assets/images/pulosembg.PNG"; 
+export const HIT_SOUND_PATH = "../src/assets/images/sounds/hit2.mp3";
+
 
 export const GameState = {
     START: "start",

@@ -78,6 +78,7 @@ canvas {
   cursor: pointer;
   transition: 0.3s ease;
   font-family: 'Luckiest Guy', cursive;
+  margin: 5px; 
 }
 
 .screen button:hover {
@@ -85,9 +86,27 @@ canvas {
   transform: scale(1.1);
 }
 
+.pause-content button {
+    padding: 14px 55px;
+  font-size: 28px;
+  border: none;
+  gap: 20px ;
+  border-radius: 50px;
+  background-color: #4DC0B5;
+  color: white;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-family: 'Luckiest Guy', cursive;
+  margin: 5px; 
+}
+
 
 .start-screen.hidden,
-.game-over.hidden {
+.game-over.hidden,
+.about-screen.hidden { 
   display: none;
 }
 
@@ -184,4 +203,93 @@ canvas {
 .game-over.show {
   visibility: visible;
   pointer-events: auto;
+}
+
+.about-screen {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 25;
+}
+
+.about-box {
+  background-color: white;
+  color: black;
+  width: 500px;
+  height: 500px;
+  border-radius: 20px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-box h2 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.about-box h3,
+.about-box h4 {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.about-box p {
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.about-box span {
+  color: red;
+}
+
+.about-box .button-back {
+  margin-top: auto;
+  align-self: center;
+  padding: 12px 30px;
+  font-size: 20px;
+  border: none;
+  border-radius: 50px;
+  background-color: #4DC0B5;
+  color: white;
+  cursor: pointer;
+  font-family: 'Luckiest Guy', cursive;
+  transition: 0.3s;
+}
+
+.about-box .button-back:hover {
+  background-color: #35978d;
+  transform: scale(1.05);
+}
+
+.pause-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px); /* Efeito de desfoque */
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.pause-screen.hidden {
+  display: none;
+}
+
+.pause-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.pause-content h2 {
+  margin-bottom: 1rem;
 }
