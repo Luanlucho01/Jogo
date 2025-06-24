@@ -15,6 +15,7 @@ gameOverScreen.classList.remove("show");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
+
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
@@ -25,7 +26,7 @@ const gameAreaWidth = canvas.width - (gameAreaMargin * 2);
 function drawGameAreaBorders(ctx, canvasHeight, gameAreaX, gameAreaWidth) {
     ctx.save();
     ctx.fillStyle = "rgba(255,255,255,0.0)";
-    const barWidth = 5;
+    const barWidth = 5; 
     ctx.fillRect(gameAreaX - barWidth, 0, barWidth, canvasHeight);
     ctx.fillRect(gameAreaX + gameAreaWidth, 0, barWidth, canvasHeight);
     ctx.restore();
@@ -45,19 +46,26 @@ const gameData = {
 const keys = {
     left: false,
     right: false,
+    space: false, 
 };
 
 const troncos = [];
 let troncoSpawnInterval = null;
 
 function spawnTronco() {
-    if (troncos.length < 3) {
-        const tronco = new Tronco(canvas.width, canvas.height, 6);
-        troncos.push(tronco);
+    if (troncos.length < 3) { 
+        const tronco = new Tronco(canvas.width, canvas.height, 6); 
+        troncos.push(tronco); 
     }
 }
 
+
 function isColliding(rect1, rect2) {
+
+    if (penguim && penguim.isJumping) {
+        return false; 
+    }
+
     return (
         rect1.position.x < rect2.position.x + rect2.width &&
         rect1.position.x + rect1.width > rect2.position.x &&
@@ -91,62 +99,69 @@ const showGameData = () => {
     }
 };
 
-const gameLoop = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawGameAreaBorders(ctx, canvas.height, gameAreaX, gameAreaWidth);
+const gameLoop = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
+    drawGameAreaBorders(ctx, canvas.height, gameAreaX, gameAreaWidth); 
 
     if (currentState === GameState.PLAYING) {
         const currentTime = performance.now();
         const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
 
+
         incrementScore(elapsedSeconds * 10 - gameData.score);
         const troncoSpeed = Math.min(3 + elapsedSeconds * 0.1, 15);
 
-        showGameData();
+        showGameData(); 
+
+        penguim.update();
 
         for (const tronco of troncos) {
             tronco.velocity = troncoSpeed;
-            tronco.fall(canvas.height, canvas.width, gameAreaX, gameAreaWidth);
-            tronco.draw(ctx);
+            tronco.fall(canvas.height, canvas.width, gameAreaX, gameAreaWidth); 
+            tronco.draw(ctx); 
 
-            if (isColliding(penguim.getHitbox(), tronco)) {
-                gameData.lives--;
+            if (isColliding(penguim.getHitbox(), tronco.getHitbox())) {
+                gameData.lives--; 
 
                 if (gameData.lives <= 0) {
-                    currentState = GameState.GAME_OVER;
-                    gameOverScreen.classList.add("show");
-                    clearInterval(troncoSpawnInterval);
+                    currentState = GameState.GAME_OVER; 
+                    gameOverScreen.classList.add("show"); 
+                    clearInterval(troncoSpawnInterval); 
                 } else {
-                    tronco.travelProgress = 1; 
+                    tronco.travelProgress = 1;
                 }
             }
         }
 
         ctx.save();
-        ctx.translate(penguim.position.x + penguim.width / 2, penguim.position.y + penguim.height / 2);
+        ctx.translate(penguim.position.x + penguim.originalWidth / 2, penguim.position.y + penguim.originalHeight / 2);
 
         if (keys.left) {
             penguim.moveLeft();
-            ctx.rotate(-0.3);
+            ctx.rotate(-0.3); 
         }
         if (keys.right) {
             penguim.moveRight();
-            ctx.rotate(0.3);
+            ctx.rotate(0.3); 
         }
 
-        ctx.translate(-penguim.position.x - penguim.width / 2, -penguim.position.y - penguim.height / 2);
-        penguim.draw(ctx);
+        
+        ctx.translate(-penguim.position.x - penguim.originalWidth / 2, -penguim.position.y - penguim.originalHeight / 2);
+        penguim.draw(ctx); 
         ctx.restore();
     }
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop); 
 };
+
 
 addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
     if (key === "a") keys.left = true;
     if (key === "d") keys.right = true;
+    if (key === " ") penguim.jump(); 
 });
 
 addEventListener("keyup", (event) => {
@@ -156,32 +171,32 @@ addEventListener("keyup", (event) => {
 });
 
 buttonPlay.addEventListener("click", () => {
-    startScreen.remove();
-    scoreUi.style.display = "block";
-    currentState = GameState.PLAYING;
-    gameData.score = 0;
-    gameData.lives = 3;
-    startTime = performance.now();
+    startScreen.remove(); 
+    scoreUi.style.display = "block"; 
+    currentState = GameState.PLAYING; 
+    gameData.score = 0; 
+    gameData.lives = 3; 
+    startTime = performance.now(); 
 
-    clearInterval(troncoSpawnInterval);
-    troncos.length = 0;
+    clearInterval(troncoSpawnInterval); 
+    troncos.length = 0; 
 
-    spawnTronco();
-    troncoSpawnInterval = setInterval(spawnTronco, 2000); // a cada 2 segundos
+    spawnTronco(); 
+    troncoSpawnInterval = setInterval(spawnTronco, 2000); 
 });
 
 buttonRestart.addEventListener("click", () => {
-    currentState = GameState.PLAYING;
-    gameData.score = 0;
-    gameData.lives = 3;
-    gameOverScreen.classList.remove("show");
-    startTime = performance.now();
+    currentState = GameState.PLAYING; 
+    gameData.score = 0; 
+    gameData.lives = 3; 
+    gameOverScreen.classList.remove("show"); 
+    startTime = performance.now(); 
 
-    clearInterval(troncoSpawnInterval);
-    troncos.length = 0;
+    clearInterval(troncoSpawnInterval); 
+    troncos.length = 0; 
 
     spawnTronco();
-    troncoSpawnInterval = setInterval(spawnTronco, 2000);
+    troncoSpawnInterval = setInterval(spawnTronco, 2000); 
 });
 
-gameLoop();
+gameLoop(); 
