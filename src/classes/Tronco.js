@@ -16,7 +16,7 @@ class Tronco {
         };
 
         // tamanho da hitbox dos troncos/obstaculos
-        this.fixedHitboxWidth = 100; 
+        this.fixedHitboxWidth = 50; 
         this.fixedHitboxHeight = 80;
 
         this.targetX = this.origin.x + offsetX;
@@ -54,9 +54,9 @@ class Tronco {
         );
 
         // Desenha a hitbox do tronco
-        const hb = this.getHitbox();
-        ctx.strokeStyle = "red";
-        ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+        // const hb = this.getHitbox();
+        // ctx.strokeStyle = "red";
+        // ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
     }
 
     getHitbox() {

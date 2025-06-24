@@ -8,7 +8,7 @@ class Penguim {
         this.currentWidth = this.originalWidth;
         this.currentHeight = this.originalHeight;
 
-        this.velocity = 20; 
+        this.velocity = 10; 
 
         this.position = {
             x: gameAreaX + (gameAreaWidth / 2) - (this.originalWidth / 2),
@@ -17,7 +17,7 @@ class Penguim {
 
         // hitbox do pinguim
         this.hitbox = {
-            width: 100,  
+            width: 60,  
             height: 60, 
         };
 
@@ -157,9 +157,9 @@ class Penguim {
         ctx.drawImage(imageToDraw, drawX, drawY, this.currentWidth, this.currentHeight);
     }
 
-    const hb = this.getHitbox();
-    ctx.strokeStyle = "red";
-    ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+    // const hb = this.getHitbox();
+    // ctx.strokeStyle = "red";
+    // ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
 }
 
 }
