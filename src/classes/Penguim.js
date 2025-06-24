@@ -32,9 +32,9 @@ class Penguim {
         this.isJumping = false; 
         this.jumpVelocityY = 0;
         this.gravity = 0.8; 
-        this.initialJumpForce = -15; 
+        this.initialJumpForce = -22; 
         this.groundY = canvasHeight - this.originalHeight;
-        this.jumpScaleFactor = 1.2; 
+        this.jumpScaleFactor = 1.4; 
 
         this.isInvincible = false;
         this.invincibilityDuration = 1500; 

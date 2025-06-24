@@ -5,13 +5,22 @@
 }
 
 body {
-  background: url("./assets/images/bg.png") no-repeat center center;
-  background-size: 100%;
+
   overflow: hidden;
   height: 100vh;
   width: 100vw;
   position: relative;
   font-family: 'Luckiest Guy', cursive;
+}
+
+#video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: -1;
 }
 
 canvas {
