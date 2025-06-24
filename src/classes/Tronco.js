@@ -54,9 +54,9 @@ class Tronco {
         );
 
         // Desenha a hitbox do tronco
-        const hb = this.getHitbox();
-        ctx.strokeStyle = "red";
-        ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+        //const hb = this.getHitbox();
+        //ctx.strokeStyle = "red";
+        //ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
     }
 
     getHitbox() {

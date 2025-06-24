@@ -158,8 +158,8 @@ class Penguim {
     }
 
     const hb = this.getHitbox();
-    ctx.strokeStyle = "red";
-    ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
+    //ctx.strokeStyle = "red";
+    //ctx.strokeRect(hb.position.x, hb.position.y, hb.width, hb.height);
 }
 
 }
