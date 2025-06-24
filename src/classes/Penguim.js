@@ -8,7 +8,7 @@ class Penguim {
         this.currentWidth = this.originalWidth;
         this.currentHeight = this.originalHeight;
 
-        this.velocity = 10; 
+        this.velocity = 20; 
 
         this.position = {
             x: gameAreaX + (gameAreaWidth / 2) - (this.originalWidth / 2),
@@ -17,7 +17,7 @@ class Penguim {
 
         // hitbox do pinguim
         this.hitbox = {
-            width: 60,  
+            width: 100,  
             height: 60, 
         };
 

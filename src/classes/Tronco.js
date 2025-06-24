@@ -16,7 +16,7 @@ class Tronco {
         };
 
         // tamanho da hitbox dos troncos/obstaculos
-        this.fixedHitboxWidth = 50; 
+        this.fixedHitboxWidth = 100; 
         this.fixedHitboxHeight = 80;
 
         this.targetX = this.origin.x + offsetX;
