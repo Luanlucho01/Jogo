@@ -6,7 +6,7 @@
 
 body {
   background: url("./assets/images/bg.png") no-repeat center center;
-  background-size: 170%;
+  background-size: 100%;
   overflow: hidden;
   height: 100vh;
   width: 100vw;

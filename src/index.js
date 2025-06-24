@@ -18,13 +18,13 @@ const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-const gameAreaMargin = 360;
+const gameAreaMargin = 460;
 const gameAreaX = gameAreaMargin;
 const gameAreaWidth = canvas.width - (gameAreaMargin * 2);
 
 function drawGameAreaBorders(ctx, canvasHeight, gameAreaX, gameAreaWidth) {
     ctx.save();
-    ctx.fillStyle = "rgba(255,255,255,0.2)";
+    ctx.fillStyle = "rgba(255,255,255,0.0)";
     const barWidth = 5;
     ctx.fillRect(gameAreaX - barWidth, 0, barWidth, canvasHeight);
     ctx.fillRect(gameAreaX + gameAreaWidth, 0, barWidth, canvasHeight);
@@ -118,7 +118,7 @@ const gameLoop = () => {
                     gameOverScreen.classList.add("show");
                     clearInterval(troncoSpawnInterval);
                 } else {
-                    tronco.travelProgress = 1; // força o respawn
+                    tronco.travelProgress = 1; 
                 }
             }
         }
