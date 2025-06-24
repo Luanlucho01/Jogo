@@ -104,7 +104,7 @@ const showGameData = () => {
         livesUi.style.marginTop = "10px";
         livesUi.style.textTransform = "uppercase";
         livesUi.style.fontSize = "1rem";
-        livesUi.innerHTML = `Lives: <span>${gameData.lives}</span>`;
+        livesUi.innerHTML = `vidas: <span>${gameData.lives}</span>`;
         scoreUi.appendChild(livesUi);
     } else {
         document.querySelector(".lives-ui span").textContent = gameData.lives;

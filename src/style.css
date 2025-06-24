@@ -169,7 +169,7 @@ canvas {
 .start-img {
   position: absolute;
   top: 50%;
-  left: 1020px;
+  left: 70%;
   transform: translateY(-50%);
   max-height: 350px;
   pointer-events: none;
